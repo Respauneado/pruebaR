@@ -1,0 +1,80 @@
+<canvas width="600" height="400"></canvas>
+<script>
+
+     var pantalla = document.querySelector("canvas");
+     var pincel = pantalla.getContext("2d");
+
+pincel.fillStyle = "lightgrey";
+pincel.fillRect(0,0,600,400);
+
+var radio = 10;
+function disenharCircunferencia(x,y,radio,color){
+    pincel.fillStyle = color;
+    pincel.beginPath();
+    pincel.arc(x,y,radio,0,2*Math.PI);
+    pincel.fill();
+
+//creamos una funcion que con solo llamarlo nos dibuje un circulo
+//para no estar codeando como dibujar cada rato
+}
+
+function disenharObjetivo(x,y){
+    disenharCircunferencia(x,y,radio+20,"blue");
+    disenharCircunferencia(x,y,radio+10,"white");
+    disenharCircunferencia(x,y,radio,"red");
+    //llamos a diseñarcircunferencia para no ensuciar el codigo y tener organizado
+    //en que parte del codigo es donde llenamos si queremos mas circulos
+
+}
+
+
+function sortearPosicion(aleatorioMaximo){
+
+    return Math.floor(Math.random()*aleatorioMaximo)
+    // creamos una funcion de aleatorio para no estar escribiendo a cada rato la funcion random
+    // y pensamos que es lo unico que pide la funcion random cuando se ejecuta, exacto un numero maximo
+    // por eso solo pedimos como parametro una variable
+}
+
+var xAleatorio;
+var yAleatorio;
+// creamos unas variables estandares donde llamamos la funcion sortear con las posiciones 
+// de X y Y la cual rellenaremos cuando escribamos la funcion diseñarobjetivo, y como parametros metemos las variables escritas arriba
+
+function limpiarPantalla(){
+    pincel.clearRect(0,0,600,400)
+}
+
+var x = 0;
+
+
+function actualizarPantalla(){
+    limpiarPantalla();
+    xAleatorio = sortearPosicion(600);
+    yAleatorio = sortearPosicion(400);
+    disenharObjetivo(xAleatorio,yAleatorio);
+    x++;
+
+}
+
+function disparar(evento){
+    var x = evento.pageX - pantalla.offsetLeft;
+    var y = evento.pageY - pantalla.offsetTop;
+
+    if((x < xAleatorio + radio)&&(x > xAleatorio - radio)&&(y < yAleatorio + radio)&&(y > yAleatorio - radio)){
+        alert("tiro certero")
+    }
+}
+
+pantalla.onclick = disparar;
+//disenharObjetivo(xAleatorio,yAleatorio);
+
+setInterval(actualizarPantalla,1000);
+
+
+
+
+
+
+
+</script>

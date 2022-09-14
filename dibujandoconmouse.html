@@ -1,0 +1,106 @@
+<canvas width="600" height="400"></canvas>
+
+<script>
+    var pantalla = document.querySelector('canvas');
+    var pincel = pantalla.getContext('2d');
+
+    pincel.fillStyle = 'grey';
+    pincel.fillRect(0, 0, 600, 400);
+
+    var puedoDibujar = false;
+    //variable para caputar el mouse en movimiento o clickea
+
+    var xRoja = 0;
+    var xVerde = 50;
+    var xAzul = 100;
+    var yCuadrado = 0;
+    //variables que tienen como valor como se van a mover en x y la y, con eso tener una idea donde situar la paleata de colores 
+    var tamanhoCuadrados = 50;
+    //variable que indica de cuantos pixeles es rellenado el cuadrado
+    var colorActual = "blue"
+    //inicializamos el color padre para que sea default
+
+//crear una funcion individual de que pedir para crear cuadrados
+    function dibujarCuadrados(x,y,tamanho,color){
+        pincel.fillStyle=color;
+        pincel.fillRect(x,y,tamanho,tamanho);
+        pincel.fill();
+    }
+//crear una funcion individual para ejecutar una cierta operacion o un mecanismo para que solo aqui se ingresen los valores correctos que necesita dibujarCuadrado por eso no le agregamos parametros de llamada
+    function dibujarPaletaColores(){
+        dibujarCuadrados(xRoja, yCuadrado, tamanhoCuadrados, "red");
+        dibujarCuadrados(xVerde, yCuadrado, tamanhoCuadrados, "green");
+        dibujarCuadrados(xAzul, yCuadrado, tamanhoCuadrados, "blue");
+    }
+
+    function dibujarCirculo(x,y) {
+
+        if(puedoDibujar) {
+            pincel.fillStyle = colorActual;
+            pincel.beginPath();
+            pincel.arc(x, y, 5, 0, 2 * 3.14);
+            pincel.fill();
+        }
+
+    }
+
+    function habilitarDibujar() {
+
+        puedoDibujar = true;
+    }
+
+    function deshabilitarDibujar() {
+
+        puedoDibujar = false;
+    }
+
+
+    function puedeDisenharArea(xCoordenada,yCoordenada){
+        if((xCoordenada >= 0 && (xCoordenada<(3*tamanhoCuadrados+5)))&& (yCoordenada>=0 && yCoordenada<(tamanhoCuadrados+5))){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
+        function capturarMovimientoDelMouse(evento){
+            var x = evento.pageX - pantalla.offsetLeft;
+            var y = evento.pageY - pantalla.offsetTop;
+
+            if(puedeDisenharArea(x,y)){
+                dibujarCirculo(x,y);
+            }
+        }
+
+            //funcion para alterar el color de la variable colorActual
+        function seleccionarColor(evento){
+            var x = evento.pageX - pantalla.offsetLeft;
+            var y = evento.pageY - pantalla.offsetTop; 
+
+            if(y > yCuadrado && (y <(yCuadrado + tamanhoCuadrados))){
+
+                if(x > xRoja && x < (yCuadrado+tamanhoCuadrados)){
+                    colorActual = "red";
+                    console.log(colorActual);
+                }
+                else if(x > xVerde && x < (xVerde+tamanhoCuadrados)){
+                    colorActual = "green"
+                }
+                else if(x > xAzul && x < (xAzul+tamanhoCuadrados)){
+                    colorActual = "blue";
+                }
+            }
+        
+        }
+
+    pantalla.onmousemove = capturarMovimientoDelMouse;
+
+    pantalla.onmousedown = habilitarDibujar;
+
+    pantalla.onmouseup = deshabilitarDibujar;
+    dibujarPaletaColores();
+
+    pantalla.onclick = seleccionarColor;
+
+</script>
